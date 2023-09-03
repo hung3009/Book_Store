@@ -27,31 +27,30 @@ const PaymentDetails = () => {
   const [receivedMessages, setReceivedMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
   const [address, setAddress] = useState("");
-  const [cvv, setCvv] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const payment = useSelector((state) => state.payment);
   const [datas, setDatas] = useState([]);
-  useEffect(() => {
-    const newSocket = connectWebSocket(
-      YOUR_CLIENT_ID,
-      RECEIVER_ID,
-      onMessageReceived
-    );
-    setSocket(newSocket);
-    return () => {
-      if (newSocket) {
-        newSocket.close();
-      }
-    };
-  }, []);
-  const onMessageReceived = (message) => {
-    setReceivedMessages((prevMessages) => [...prevMessages, message]);
-  };
-  const handleSendMessage = () => {
-    sendMessage(socket, YOUR_CLIENT_ID, RECEIVER_ID, inputMessage);
-    setInputMessage("");
-  };
+  // useEffect(() => {
+  //   const newSocket = connectWebSocket(
+  //     YOUR_CLIENT_ID,
+  //     RECEIVER_ID,
+  //     onMessageReceived
+  //   );
+  //   setSocket(newSocket);
+  //   return () => {
+  //     if (newSocket) {
+  //       newSocket.close();
+  //     }
+  //   };
+  // }, []);
+  // const onMessageReceived = (message) => {
+  //   setReceivedMessages((prevMessages) => [...prevMessages, message]);
+  // };
+  // const handleSendMessage = () => {
+  //   sendMessage(socket, YOUR_CLIENT_ID, RECEIVER_ID, inputMessage);
+  //   setInputMessage("");
+  // };
 
   //////////////////////////////
 
@@ -85,6 +84,7 @@ const PaymentDetails = () => {
           dispatch(updateCurrentStep({ currentStep: currentStep + 1 }));
 
           return;
+
         } else if (res.data === "fail") {
           message.error("Order fail");
         }
@@ -94,7 +94,7 @@ const PaymentDetails = () => {
         console.log("err", err);
       });
 
-    handleSendMessage();
+    // handleSendMessage();
   }
   const handlePrev = () => {
     dispatch(updateCurrentStep({ currentStep: currentStep - 1 }));
