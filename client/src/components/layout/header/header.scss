@@ -1,0 +1,42 @@
+.search-input {
+  width: 300px;
+}
+.search-result {
+  position: relative;
+  top: 5px;
+  left: 0px;
+  width: 300px;
+  background-color: #fffcfce8;
+  border: 1px solid #ccc;
+  border-top: none;
+  z-index: 1;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  padding:0;
+  .suggestion-item {
+    
+    &:hover {
+      background-color: #ccc;
+      margin: 0;
+      cursor: pointer;
+    }
+    
+  }
+}
+
+//ihone 5/SE
+@media only screen and (min-device-width: 100px) and (max-device-width: 650px) {
+  // iphone 5/SE/12 pro
+  .search-input {
+    width: 200px;
+  }
+  .search-result {
+    position: relative;
+    top: 5px;
+    left: 30px;
+    width: 250px;
+  }
+}
