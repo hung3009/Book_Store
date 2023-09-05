@@ -1,66 +1,53 @@
-
 .comment-container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   margin-top: 20px;
-  background-color: #f0f0f0; /* Màu nền chung */
-  padding: 20px; /* Khoảng cách giữa các phần tử */
-  border-radius: 8px; /* Góc bo tròn */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng đổ */
+  background-color: #f0f0f0; 
+  padding: 20px; 
+  border-radius: 8px; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
 }
-
 .comment-title {
   font-size: 24px;
   font-weight: bold;
-  margin-bottom: 20px; /* Khoảng cách dưới tiêu đề */
+  margin-bottom: 20px; 
 }
-
 .comment-list {
   width: 100%;
 }
-
 .comment-item {
   display: flex;
   justify-content: space-between;
-  align-items: center; /* Canh giữa các phần tử */
+  align-items: center; 
   flex-direction: column;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
-  background-color: #ffffff; /* Màu nền của mỗi comment */
+  background-color: #ffffff; 
   transition: background-color 0.2s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
 .comment-item:hover {
-  background-color: #f5f5f5; /* Màu nền khi di chuột vào */
+  background-color: #f5f5f5; 
 }
-
-
-
 .comment-input {
   width: 100%;
-  height: 80px; /* Giảm kích thước ô nhập */
+  height: 80px; 
   padding: 10px;
-  margin-bottom: 10px; /* Khoảng cách dưới ô nhập */
+  margin-bottom: 10px; 
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 16px;
 }
-
 .add-comment-button{
   align-self: flex-end;
 }
-
 .clear-comment-button{
   align-self: flex-end;
   
 }
-
-
-
 .comment-like-dislike {
   display: flex;
   align-items: center;
@@ -68,7 +55,6 @@
   margin-right: 10px;
   align-self: flex-end;
 }
-
 .comment-like-dislike button {
   background-color: transparent;
   border: none;
@@ -77,27 +63,29 @@
   display: flex;
   align-items: center;
   margin-right: 10px;
-  color: #333; /* Màu mặc định của nút */
+  color: #333; 
 }
-
 .comment-like-dislike button:hover {
-  color: #1890ff; /* Màu khi di chuột vào */
+  color: #1890ff; 
 }
-
 .comment-like-dislike span {
   font-size: 16px;
 }
-
 .comment-user {
   align-self: flex-start;
   font-weight: bold; 
   font-size: 20px;
   margin-left:10px;
 }
-
 .comment-content {
   align-self: flex-start;
   margin-left:10px;
 }
-  
+.comment-timestamp {
+  color: #999; 
+  font-size: 12px; 
+  margin-left: 8px;
+  align-self: flex-start;
+}
+
   

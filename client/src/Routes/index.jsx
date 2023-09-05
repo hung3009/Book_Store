@@ -68,14 +68,11 @@ const publicRoutes = [
 const userRoutes = [
   {
     path: "/",
-
     component: Home,
-  
     DefaultLayout: ClientPage,
   },
   {
     path: "/user",
-
     component: Home,
     DefaultLayout: ClientPage,
   },

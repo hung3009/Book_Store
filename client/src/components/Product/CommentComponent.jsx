@@ -3,6 +3,7 @@ import axios from "axios";
 import io from "socket.io-client";
 import { Button, Input, List, Typography, message } from "antd";
 import { LikeOutlined, DislikeOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import moment from "moment";
 
 import "./CommentComponent.scss";
 
@@ -15,7 +16,7 @@ const CommentComponent = ({ productId, user }) => {
 
   useEffect(() => {
     // Kết nối với server Socket.io
-    const newSocket = io("https://localhost:8001");
+    const newSocket = io(`${process.env.REACT_APP_API_PORT}`);
     setSocket(newSocket);
 
     // Lắng nghe sự kiện "newComment" từ server và cập nhật danh sách bình luận
@@ -116,11 +117,13 @@ const CommentComponent = ({ productId, user }) => {
               </Button>
               <span>{comment.dislikes}</span>
             </div>
-          </List.Item>
+            <div className="comment-timestamp">
+              {moment(comment.createdAt).fromNow()} 
+            </div>
+          </List.Item>  
         )}
       />
-
-  </div>
+    </div>
 
   );
 };

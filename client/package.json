@@ -23,6 +23,7 @@
     "formik": "^2.2.9",
     "gapi-script": "^1.2.0",
     "install": "^0.13.0",
+    "moment": "^2.29.4",
     "normalize.css": "^8.0.1",
     "npm": "^9.8.1",
     "react": "^18.2.0",
