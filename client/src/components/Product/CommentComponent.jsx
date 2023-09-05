@@ -1,9 +1,9 @@
-// CommentComponent.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import io from "socket.io-client";
-import { Button, Input, List, Typography } from "antd";
-import { LikeOutlined, DislikeOutlined } from "@ant-design/icons";
+import { Button, Input, List, Typography, message } from "antd";
+import { LikeOutlined, DislikeOutlined, CloseCircleOutlined } from "@ant-design/icons";
+
 import "./CommentComponent.scss";
 
 
@@ -11,6 +11,7 @@ const CommentComponent = ({ productId, user }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [socket, setSocket] = useState(null);
+  const [isInputEmpty, setIsInputEmpty] = useState(true); 
 
   useEffect(() => {
     // Kết nối với server Socket.io
@@ -40,9 +41,19 @@ const CommentComponent = ({ productId, user }) => {
     };
   }, [productId]);
 
+  const handleClearInput = () => {
+    setNewComment(""); 
+    setIsInputEmpty(true); 
+  };
+
   const handleAddComment = () => {
     if (newComment.trim() === "") return;
     axios.post(`${process.env.REACT_APP_API_PORT}/comments`, { productId, user, content: newComment });
+    message.success("Add comment success");
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+
     setNewComment("");
   };
 
@@ -57,14 +68,25 @@ const CommentComponent = ({ productId, user }) => {
   return (
     <div className="comment-container">
       <Typography.Title className="comment-title" level={4}>Add Comments</Typography.Title>
-      <Input
+      <Input.TextArea
         className="comment-input"
         placeholder="Add a comment..."
         value={newComment}
-        onChange={(e) => setNewComment(e.target.value)}
+        onChange={(e) => {
+          setNewComment(e.target.value);
+          setIsInputEmpty(e.target.value === ""); 
+        }}
+        autoSize={{ minRows: 4, maxRows: 10 }}
       />
-      
-      <Button type="primary" onClick={handleAddComment}>
+      {isInputEmpty ? null : (
+        <Button
+          type="text"
+          className="clear-comment-button"
+          onClick={handleClearInput}
+          icon={<CloseCircleOutlined />} // Thay đổi biểu tượng theo ý muốn của bạn
+        />
+      )}
+      <Button type="primary" className="add-comment-button" onClick={handleAddComment}>
         Add Comment
       </Button>
       <br/>
@@ -76,10 +98,8 @@ const CommentComponent = ({ productId, user }) => {
         dataSource={comments}
         renderItem={(comment) => (
           <List.Item className="comment-item">
-            <div>
-              <Typography.Text strong>{comment.user}</Typography.Text>
-              <Typography.Paragraph>{comment.content}</Typography.Paragraph>
-            </div>
+            <Typography.Text className="comment-user" strong>{comment.user}</Typography.Text>
+            <Typography.Paragraph className="comment-content" >{comment.content}</Typography.Paragraph>
             <div className="comment-like-dislike">
               <Button
                 icon={<LikeOutlined />}
@@ -99,6 +119,7 @@ const CommentComponent = ({ productId, user }) => {
           </List.Item>
         )}
       />
+
   </div>
 
   );

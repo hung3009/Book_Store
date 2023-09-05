@@ -1,75 +1,103 @@
-/* CommentComponent.css */
+
 .comment-container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   margin-top: 20px;
+  background-color: #f0f0f0; /* Màu nền chung */
+  padding: 20px; /* Khoảng cách giữa các phần tử */
+  border-radius: 8px; /* Góc bo tròn */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng đổ */
+}
+
+.comment-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px; /* Khoảng cách dưới tiêu đề */
+}
+
+.comment-list {
+  width: 100%;
+}
+
+.comment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Canh giữa các phần tử */
+  flex-direction: column;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #ffffff; /* Màu nền của mỗi comment */
+  transition: background-color 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.comment-item:hover {
+  background-color: #f5f5f5; /* Màu nền khi di chuột vào */
 }
 
 
-  
-  .comment-input {
-    width: 100%;
-    height: 200px;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
-  }
 
-  
-  .comment-list {
-    width: 100%;
-  }
-  
-  .comment-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #f7f7f7; /* Màu nền */
-  }
-  
-  .comment-item:hover {
-    background-color: #e0e0e0; /* Màu nền khi hover */
-  }
-  
-  .comment-like-dislike {
-    // justify-content: space-between;
-    // align-items: center;
-    display: flex;
-    flex-direction: column; /* Để nút "Like" và "Dislike" xếp thẳng hàng theo chiều dọc */
-    align-items: flex-end; 
-    margin-top: 10px;
-  }
-  
-  .comment-like-dislike button {
-    background-color: transparent;
-    border: solid 0.5px;
-    border-color: grey;
-    cursor: pointer;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-  }
-  
-  .comment-like-dislike button:hover {
-    color: #1890ff; /* Màu chữ khi hover */
-  }
-  
-  .comment-like-dislike span {
-    margin-left: 5px;
-    font-size: 14px;
-  }
+.comment-input {
+  width: 100%;
+  height: 80px; /* Giảm kích thước ô nhập */
+  padding: 10px;
+  margin-bottom: 10px; /* Khoảng cách dưới ô nhập */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+}
 
-  .comment-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
+.add-comment-button{
+  align-self: flex-end;
+}
+
+.clear-comment-button{
+  align-self: flex-end;
+  
+}
+
+
+
+.comment-like-dislike {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  margin-right: 10px;
+  align-self: flex-end;
+}
+
+.comment-like-dislike button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+  color: #333; /* Màu mặc định của nút */
+}
+
+.comment-like-dislike button:hover {
+  color: #1890ff; /* Màu khi di chuột vào */
+}
+
+.comment-like-dislike span {
+  font-size: 16px;
+}
+
+.comment-user {
+  align-self: flex-start;
+  font-weight: bold; 
+  font-size: 20px;
+  margin-left:10px;
+}
+
+.comment-content {
+  align-self: flex-start;
+  margin-left:10px;
+}
   
   

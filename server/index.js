@@ -11,8 +11,6 @@ const allRouter = require("./routes");
 const setupSocket = require("./util/socket");
 
 
-// const startWebSocketServer = require("./util/socket");
-
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 

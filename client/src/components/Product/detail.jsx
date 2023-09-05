@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom"; 
 import { Typography } from "antd";
 import Rating from "@mui/material/Rating";
 import { useSelector, useDispatch } from "react-redux";
