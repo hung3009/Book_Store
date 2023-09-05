@@ -1,3 +1,59 @@
+const { Server } = require("socket.io");
+const Comment = require("../models/comment");
+
+module.exports = function (server) {
+  const io = new Server(server, {
+    cors: {
+      origin: "http://localhost:3000",
+    },
+  });
+
+  io.on("connection", (socket) => {
+    console.log("A user connected");
+
+    socket.on("disconnect", () => {
+      console.log("User disconnected");
+    });
+
+    socket.on("addComment", async (data) => {
+      try {
+        const newComment = new Comment(data);
+        await newComment.save();
+        io.emit("newComment", newComment);
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    // Handle like/dislike events using socket.io
+    socket.on("likeComment", async (commentId) => {
+      try {
+        const comment = await Comment.findById(commentId);
+        comment.likes += 1;
+        await comment.save();
+        io.emit("updateComment", comment);
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    socket.on("dislikeComment", async (commentId) => {
+      try {
+        const comment = await Comment.findById(commentId);
+        comment.dislikes += 1;
+        await comment.save();
+        io.emit("updateComment", comment);
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  });
+};
+
+
+
+
+
 // const WebSocket = require("ws");
 
 // function startWebSocketServer() {
@@ -37,39 +93,39 @@
 
 // module.exports = startWebSocketServer;
 
-const WebSocket = require("ws");
+// const WebSocket = require("ws");
 
-function startWebSocketServer(server) {
-  const wss = new WebSocket.Server({ server });
-  const connections = new Set();
-  wss.on("connection", (socket) => {
-    console.log("Client connected ");
-    connections.add(socket);
-    console.log("Number of connections:", connections.size);
-    socket.on("message", (message) => {
-      const decodedMessage = message.toString();
-      const messageObject = JSON.parse(decodedMessage);
-      console.log("Received message:", messageObject);
-      const { receiverId } = messageObject;
-      console.log("ID người nhận: ", receiverId);
-      connections.forEach((connection) => {
-        connection.id = receiverId;
-        if (connection !== socket) {
-          // Check if the connection's ID matches the recipient ID
-          if (connection.id === receiverId) {
-            connection.send(decodedMessage);
-          }
-        }
-      });
-      // Gửi tin nhắn vừa nhận về client gốc
-      // socket.send(decodedMessage);
-    });
+// function startWebSocketServer(server) {
+//   const wss = new WebSocket.Server({ server });
+//   const connections = new Set();
+//   wss.on("connection", (socket) => {
+//     console.log("Client connected ");
+//     connections.add(socket);
+//     console.log("Number of connections:", connections.size);
+//     socket.on("message", (message) => {
+//       const decodedMessage = message.toString();
+//       const messageObject = JSON.parse(decodedMessage);
+//       console.log("Received message:", messageObject);
+//       const { receiverId } = messageObject;
+//       console.log("ID người nhận: ", receiverId);
+//       connections.forEach((connection) => {
+//         connection.id = receiverId;
+//         if (connection !== socket) {
+//           // Check if the connection's ID matches the recipient ID
+//           if (connection.id === receiverId) {
+//             connection.send(decodedMessage);
+//           }
+//         }
+//       });
+//       // Gửi tin nhắn vừa nhận về client gốc
+//       // socket.send(decodedMessage);
+//     });
 
-    socket.on("close", () => {
-      console.log("Client disconnected");
-      connections.delete(socket);
-    });
-  });
-}
+//     socket.on("close", () => {
+//       console.log("Client disconnected");
+//       connections.delete(socket);
+//     });
+//   });
+// }
 
-module.exports = startWebSocketServer;
+// module.exports = startWebSocketServer;

@@ -8,7 +8,10 @@ const MongoDB = require("./config/connectdb");
 const cors = require("cors");
 const morgan = require("morgan");
 const allRouter = require("./routes");
-const startWebSocketServer = require("./util/socket");
+const setupSocket = require("./util/socket");
+
+
+// const startWebSocketServer = require("./util/socket");
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
@@ -29,12 +32,12 @@ const credentials = {
   cert: certificate,
 };
 
+
 const server = https.createServer(credentials, app);
+
+setupSocket(server);
+
 
 server.listen(process.env.PORT, () => {
   console.log("Server is running on port", process.env.PORT);
 });
-startWebSocketServer(server);
-// app.listen(process.env.PORT, () => {
-//   console.log("Server is running on port", process.env.PORT);
-// });

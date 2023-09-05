@@ -9,8 +9,9 @@ import { message } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { addToCart } from "..//..//redux//features//orderSlice";
 import ListCardProduct from "./listcard";
-import LikeButton from "./SocialPlugin/LikeButton";
-import Comment from "./SocialPlugin/Comment";
+import CommentComponent from "./CommentComponent";
+// import LikeButton from "./SocialPlugin/LikeButton";
+// import Comment from "./SocialPlugin/Comment";
 import { initFacebookSDK } from "../../utils/facebookplugin/initSDKFacebook"
 const { Text, Title, H } = Typography;
 
@@ -20,6 +21,8 @@ function Detailbook(props) {
   const [data, setData] = useState([]);
   const orders = useSelector((state) => state.order);
   const role = useSelector((state) => state.role);
+  const username = useSelector((state) => state.user.username);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -108,20 +111,9 @@ function Detailbook(props) {
               <span id="ship_text">Arrived in 2 days</span>
             </div>
             <hr id="line_add" />
-            <LikeButton dataHref={"https://developers.facebook.com/docs/plugins/"} />
+            {/* <LikeButton dataHref={"https://developers.facebook.com/docs/plugins/"} /> */}
           </div>
         </form>
-        
-        {/* <div>
-          <CommentList />
-        </div>
-        {role.role === "user" ? (
-          <div>
-            <CommentForm />
-          </div>
-        ) : (
-          <div style={{ display: "none" }}></div>
-        )} */}
         
         
         <div>
@@ -131,7 +123,8 @@ function Detailbook(props) {
         </div>
       </div>
       <ListCardProduct genre={data.Genre} />
-      <Comment dataHref={"https://developers.facebook.com/docs/plugins/comments#configurator"} width="1260"/>
+      {/* <Comment dataHref={"https://developers.facebook.com/docs/plugins/comments#configurator"} width="1260"/> */}
+      <CommentComponent productId={idp} user={username} />
     </>
   );
 }

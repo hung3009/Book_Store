@@ -8,6 +8,7 @@ const middlewareAuth = require("../middleware/authMiddleware");
 const cloudinaryMiddleware = require("../middleware/cloudinary.middleware");
 const genreController = require("../controllers/genreController");
 const paypalController = require("../controllers/paypalController");
+const commentController = require("../controllers/commentController");
 //AUTHENTICATION
 router.post("/signin", authController.signin); //
 router.post("/register", authController.register); //
@@ -69,6 +70,10 @@ router.post("/getallgenres", genreController.getAllGenres);
 
 //PAYPAL
 router.post("/paypal/capture", paypalController.capturePayment);
+
+//comment
+router.post("/comments", commentController.addComment);
+router.get("/comments/:productId", commentController.getCommentsByProductId);
 
 
 module.exports = router;
