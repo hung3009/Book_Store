@@ -63,9 +63,13 @@ const CommentComponent = ({ productId, user }) => {
         value={newComment}
         onChange={(e) => setNewComment(e.target.value)}
       />
+      
       <Button type="primary" onClick={handleAddComment}>
         Add Comment
       </Button>
+      <br/>
+      <br/>
+      
       <Typography.Title className="comment-title" level={4}>Comments</Typography.Title>
       <List
         className="comment-list"
