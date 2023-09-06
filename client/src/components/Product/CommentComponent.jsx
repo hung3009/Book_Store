@@ -13,6 +13,8 @@ const CommentComponent = ({ productId, user }) => {
   const [newComment, setNewComment] = useState("");
   const [socket, setSocket] = useState(null);
   const [isInputEmpty, setIsInputEmpty] = useState(true); 
+  const [userLikedComments, setUserLikedComments] = useState([]);
+  const [userDislikedComments, setUserDislikedComments] = useState([]);
 
   useEffect(() => {
     // Kết nối với server Socket.io
@@ -31,16 +33,30 @@ const CommentComponent = ({ productId, user }) => {
       );
     });
 
+    
     // Gửi yêu cầu lấy danh sách bình luận từ server
     axios.get(`${process.env.REACT_APP_API_PORT}/comments/${productId}`).then((response) => {
       setComments(response.data);
+      console.log(response.data);
+
+      const likedComments = response.data.filter((comment) =>
+        comment.likedBy.includes(user)
+      );
+      const dislikedComments = response.data.filter((comment) =>
+        comment.dislikedBy.includes(user)
+      );
+      setUserLikedComments(likedComments.map((comment) => comment._id));
+      setUserDislikedComments(dislikedComments.map((comment) => comment._id));
+            
     });
 
     return () => {
       // Ngắt kết nối khi component unmount
       newSocket.disconnect();
     };
-  }, [productId]);
+
+
+  }, [productId,user]);
 
   const handleClearInput = () => {
     setNewComment(""); 
@@ -58,12 +74,46 @@ const CommentComponent = ({ productId, user }) => {
     setNewComment("");
   };
 
-  const handleLikeComment = (commentId) => {
-    socket.emit("likeComment", commentId);
-  };
 
+  const handleLikeComment = (commentId) => {
+    if (!userLikedComments.includes(commentId)) {
+       // Gửi yêu cầu "like" đến server
+      socket.emit("likeComment", commentId, user);
+
+
+      const comment = comments.find((c) => c._id === commentId);
+
+      if (comment && comment.likedBy.some((likedUser) => likedUser === user)) {
+        return;
+      }
+
+
+       // Cập nhật trạng thái "liked" trong state và localStorage
+       const updatedLikedComments = [...userLikedComments, commentId];
+       setUserLikedComments(updatedLikedComments);
+     
+    }
+  };
+  
   const handleDislikeComment = (commentId) => {
-    socket.emit("dislikeComment", commentId);
+    if (!userDislikedComments.includes(commentId)) {
+      // Gửi yêu cầu "dislike" đến server
+      socket.emit("dislikeComment", commentId, user);
+
+
+
+      const comment = comments.find((c) => c._id === commentId);
+
+      if (comment && comment.dislikedBy.some((dislikedUser) => dislikedUser === user)) {
+       
+        return;
+      }
+
+      // Cập nhật trạng thái "disliked" trong state và localStorage
+      const updatedDislikedComments = [...userDislikedComments, commentId];
+      setUserDislikedComments(updatedDislikedComments);
+      
+    }
   };
 
   return (
@@ -103,14 +153,26 @@ const CommentComponent = ({ productId, user }) => {
             <Typography.Paragraph className="comment-content" >{comment.content}</Typography.Paragraph>
             <div className="comment-like-dislike">
               <Button
-                icon={<LikeOutlined />}
+                icon={
+                  <LikeOutlined
+                    style={{
+                      color: userLikedComments.includes(comment._id) ? "green" : "black",
+                    }}
+                  />
+                }
                 onClick={() => handleLikeComment(comment._id)}
               >
                 Like
               </Button>
               <span>{comment.likes}</span>
               <Button
-                icon={<DislikeOutlined />}
+                icon={
+                  <DislikeOutlined
+                    style={{
+                      color: userDislikedComments.includes(comment._id) ? "red" : "black",
+                    }}
+                  />
+                }
                 onClick={() => handleDislikeComment(comment._id)}
               >
                 Dislike

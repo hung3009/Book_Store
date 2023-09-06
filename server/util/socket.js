@@ -25,28 +25,38 @@ module.exports = function (server) {
       }
     });
 
-    // Handle like/dislike events using socket.io
-    socket.on("likeComment", async (commentId) => {
-      try {
-        const comment = await Comment.findById(commentId);
-        comment.likes += 1;
-        await comment.save();
-        io.emit("updateComment", comment);
-      } catch (error) {
-        console.error(error);
-      }
-    });
+    // const likedComments = {};
+    // const dislikedComments = {};
 
-    socket.on("dislikeComment", async (commentId) => {
+
+    socket.on("likeComment", async (commentId, userId) => {
       try {
         const comment = await Comment.findById(commentId);
-        comment.dislikes += 1;
-        await comment.save();
-        io.emit("updateComment", comment);
+        if (!comment.likedBy.includes(userId)) {
+          comment.likedBy.push(userId);
+          comment.likes += 1;
+          await comment.save();
+          io.emit("updateComment", comment);
+        }
       } catch (error) {
         console.error(error);
       }
     });
+    
+    socket.on("dislikeComment", async (commentId, userId) => {
+      try {
+        const comment = await Comment.findById(commentId);
+        if (!comment.dislikedBy.includes(userId)) {
+          comment.dislikedBy.push(userId);
+          comment.dislikes += 1;
+          await comment.save();
+          io.emit("updateComment", comment);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+    
   });
 };
 

@@ -19,10 +19,20 @@ const commentSchema = new mongoose.Schema({
   dislikes: {
     type: Number,
   },
+  likedBy: [{ 
+    type: String,
+    ref: "User" 
+  }],
+  dislikedBy: [{ 
+    type: String,
+    ref: "User" 
+  }],
   createdAt: { 
     type: Date, 
     default: Date.now 
   },
+  
+
 });
 
 module.exports = mongoose.model("Comment", commentSchema);

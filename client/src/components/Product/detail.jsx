@@ -17,7 +17,7 @@ const { Text, Title, H } = Typography;
 
 function Detailbook(props) {
   const [idp, setIdp] = useState(useParams().id);
-  console.log("sf", props);
+  // console.log("sf", props);
   const [data, setData] = useState([]);
   const orders = useSelector((state) => state.order);
   const role = useSelector((state) => state.role);
@@ -35,13 +35,13 @@ function Detailbook(props) {
       .get(`${process.env.REACT_APP_API_PORT}/${idp}`)
       .then((res) => {
         setData(res.data.data);
-        console.log(res.data.data);
+        // console.log(res.data.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, [idp]);
-  console.log("safdasf", data);
+  // console.log("safdasf", data);
   const handleAddToCart = (event) => {
     event.preventDefault(); // Empêche le rechargement de la page
     const existingOrder = orders.find((order) => order.id === data.ID);
