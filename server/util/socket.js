@@ -25,14 +25,42 @@ module.exports = function (server) {
       }
     });
 
-    // const likedComments = {};
-    // const dislikedComments = {};
+    //----------------------------------------------------------------
 
+    // socket.on("likeComment", async (commentId, userId) => {
+    //   try {
+    //     const comment = await Comment.findById(commentId);
+    //     if (!comment.likedBy.includes(userId)) {
+    //       comment.likedBy.push(userId);
+    //       comment.likes += 1;
+    //       await comment.save();
+    //       io.emit("updateComment", comment);
+    //     }
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // });
+    
+    // socket.on("dislikeComment", async (commentId, userId) => {
+    //   try {
+    //     const comment = await Comment.findById(commentId);
+    //     if (!comment.dislikedBy.includes(userId)) {
+    //       comment.dislikedBy.push(userId);
+    //       comment.dislikes += 1;
+    //       await comment.save();
+    //       io.emit("updateComment", comment);
+    //     }
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // });
+
+    //----------------------------------------------------------------
 
     socket.on("likeComment", async (commentId, userId) => {
       try {
         const comment = await Comment.findById(commentId);
-        if (!comment.likedBy.includes(userId)) {
+        if (!comment.likedBy.includes(userId) && !comment.dislikedBy.includes(userId)) {
           comment.likedBy.push(userId);
           comment.likes += 1;
           await comment.save();
@@ -46,7 +74,7 @@ module.exports = function (server) {
     socket.on("dislikeComment", async (commentId, userId) => {
       try {
         const comment = await Comment.findById(commentId);
-        if (!comment.dislikedBy.includes(userId)) {
+        if (!comment.likedBy.includes(userId) && !comment.dislikedBy.includes(userId)) {
           comment.dislikedBy.push(userId);
           comment.dislikes += 1;
           await comment.save();

@@ -107,11 +107,11 @@ function Detailbook(props) {
             )}
             <hr id="line_add" />
             <div id="img_truck">
-              {/* <img id="truckicon" src="/truckicon.jpg" alt="Truck Icon" /> */}
+              {/* <img id="truckicon" src="img/truckicon.png" alt="TruckIcon" /> */}
               <span id="ship_text">Arrived in 2 days</span>
             </div>
             <hr id="line_add" />
-            {/* <LikeButton dataHref={"https://developers.facebook.com/docs/plugins/"} /> */}
+            
           </div>
         </form>
         
@@ -123,8 +123,7 @@ function Detailbook(props) {
         </div>
       </div>
       <ListCardProduct genre={data.Genre} />
-      {/* <Comment dataHref={"https://developers.facebook.com/docs/plugins/comments#configurator"} width="1260"/> */}
-      <CommentComponent productId={idp} user={username} />
+      <CommentComponent productId={idp} user={username} role={role.role} />
     </>
   );
 }

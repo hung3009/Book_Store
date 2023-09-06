@@ -8,15 +8,21 @@ import moment from "moment";
 import "./CommentComponent.scss";
 
 
-const CommentComponent = ({ productId, user }) => {
+const CommentComponent = ({ productId, user, role }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [socket, setSocket] = useState(null);
   const [isInputEmpty, setIsInputEmpty] = useState(true); 
   const [userLikedComments, setUserLikedComments] = useState([]);
   const [userDislikedComments, setUserDislikedComments] = useState([]);
+  const [commentStatus, setCommentStatus] = useState({});
+  
 
   useEffect(() => {
+    // Khôi phục trạng thái của comment từ state nếu có
+    const storedCommentStatus = JSON.parse(localStorage.getItem("commentStatus")) || {};
+    setCommentStatus(storedCommentStatus);
+
     // Kết nối với server Socket.io
     const newSocket = io(`${process.env.REACT_APP_API_PORT}`);
     setSocket(newSocket);
@@ -31,6 +37,29 @@ const CommentComponent = ({ productId, user }) => {
       setComments((prevComments) =>
         prevComments.map((c) => (c._id === comment._id ? comment : c))
       );
+
+
+
+
+      //----------------------------------------------------------------
+      setUserLikedComments((prevLikedComments) => {
+        if (comment.likedBy.includes(user)) {
+          return [...prevLikedComments, comment._id];
+        } else {
+          return prevLikedComments.filter((id) => id !== comment._id);
+        }
+      });
+  
+      setUserDislikedComments((prevDislikedComments) => {
+        if (comment.dislikedBy.includes(user)) {
+          return [...prevDislikedComments, comment._id];
+        } else {
+          return prevDislikedComments.filter((id) => id !== comment._id);
+        }
+      });
+      //----------------------------------------------------------------
+
+
     });
 
     
@@ -74,74 +103,103 @@ const CommentComponent = ({ productId, user }) => {
     setNewComment("");
   };
 
-
   const handleLikeComment = (commentId) => {
-    if (!userLikedComments.includes(commentId)) {
-       // Gửi yêu cầu "like" đến server
-      socket.emit("likeComment", commentId, user);
+    if (["user", "employee", "admin"].includes(role)) {
+      if (!userLikedComments.includes(commentId)) {
+        // Gửi yêu cầu "like" đến server
+        socket.emit("likeComment", commentId, user);
 
 
-      const comment = comments.find((c) => c._id === commentId);
+        //----------------------------------------------------------------
+        setCommentStatus((prevStatus) => ({
+          ...prevStatus,
+          [commentId]: "liked",
+        }));
+        //----------------------------------------------------------------
 
-      if (comment && comment.likedBy.some((likedUser) => likedUser === user)) {
-        return;
+        
+
+        const comment = comments.find((c) => c._id === commentId);
+
+        if (comment && comment.likedBy.some((likedUser) => likedUser === user)) {
+          return;
+        }
+
+        // Cập nhật trạng thái "liked" trong state và localStorage
+        const updatedLikedComments = [...userLikedComments, commentId];
+        setUserLikedComments(updatedLikedComments);
       }
-
-
-       // Cập nhật trạng thái "liked" trong state và localStorage
-       const updatedLikedComments = [...userLikedComments, commentId];
-       setUserLikedComments(updatedLikedComments);
-     
+    } else {
+      message.error("You must log in or sign up to like comments");
     }
   };
   
   const handleDislikeComment = (commentId) => {
-    if (!userDislikedComments.includes(commentId)) {
-      // Gửi yêu cầu "dislike" đến server
-      socket.emit("dislikeComment", commentId, user);
+    if (["user", "employee", "admin"].includes(role)) {
+      if (!userDislikedComments.includes(commentId)) {
+        // Gửi yêu cầu "dislike" đến server
+        socket.emit("dislikeComment", commentId, user);
 
+        //----------------------------------------------------------------
+        setCommentStatus((prevStatus) => ({
+          ...prevStatus,
+          [commentId]: "disliked",
+        }));
+        //----------------------------------------------------------------
 
-
-      const comment = comments.find((c) => c._id === commentId);
-
-      if (comment && comment.dislikedBy.some((dislikedUser) => dislikedUser === user)) {
        
-        return;
-      }
 
-      // Cập nhật trạng thái "disliked" trong state và localStorage
-      const updatedDislikedComments = [...userDislikedComments, commentId];
-      setUserDislikedComments(updatedDislikedComments);
-      
+        const comment = comments.find((c) => c._id === commentId);
+
+        if (comment && comment.dislikedBy.some((dislikedUser) => dislikedUser === user)) {
+          return;
+        }
+
+        // Cập nhật trạng thái "disliked" trong state và localStorage
+        const updatedDislikedComments = [...userDislikedComments, commentId];
+        setUserDislikedComments(updatedDislikedComments);
+      }
+    } else {
+      message.error("You must log in or sign up to dislike comments");
     }
   };
 
   return (
     <div className="comment-container">
-      <Typography.Title className="comment-title" level={4}>Add Comments</Typography.Title>
-      <Input.TextArea
-        className="comment-input"
-        placeholder="Add a comment..."
-        value={newComment}
-        onChange={(e) => {
-          setNewComment(e.target.value);
-          setIsInputEmpty(e.target.value === ""); 
-        }}
-        autoSize={{ minRows: 4, maxRows: 10 }}
-      />
-      {isInputEmpty ? null : (
-        <Button
-          type="text"
-          className="clear-comment-button"
-          onClick={handleClearInput}
-          icon={<CloseCircleOutlined />} // Thay đổi biểu tượng theo ý muốn của bạn
+      {(role === "user" || role === "admin" || role === "employee") ? (
+      <>
+        <Typography.Title className="comment-title" level={4}>Add Comments</Typography.Title>
+        <Input.TextArea
+          className="comment-input"
+          placeholder="Add a comment..."
+          value={newComment}
+          onChange={(e) => {
+            setNewComment(e.target.value);
+            setIsInputEmpty(e.target.value === "");
+          }}
+          autoSize={{ minRows: 4, maxRows: 10 }}
         />
+        {isInputEmpty ? null : (
+          <Button
+            type="text"
+            className="clear-comment-button"
+            onClick={handleClearInput}
+            icon={<CloseCircleOutlined />} 
+          />
+        )}
+        <Button type="primary" className="add-comment-button" onClick={handleAddComment}>
+          Add Comment
+        </Button>
+        <br />
+        <br />
+      </>
+      ) : (
+        <Typography.Text style={{ fontSize: "24px", opacity: "0.25",fontWeight: "bold" }}>
+          You must log in to comment
+        </Typography.Text>
       )}
-      <Button type="primary" className="add-comment-button" onClick={handleAddComment}>
-        Add Comment
-      </Button>
-      <br/>
-      <br/>
+
+     
       
       <Typography.Title className="comment-title" level={4}>Comments</Typography.Title>
       <List
@@ -161,6 +219,7 @@ const CommentComponent = ({ productId, user }) => {
                   />
                 }
                 onClick={() => handleLikeComment(comment._id)}
+                disabled={commentStatus[comment._id] === "disliked"}
               >
                 Like
               </Button>
@@ -174,6 +233,7 @@ const CommentComponent = ({ productId, user }) => {
                   />
                 }
                 onClick={() => handleDislikeComment(comment._id)}
+                disabled={commentStatus[comment._id] === "liked"}
               >
                 Dislike
               </Button>
