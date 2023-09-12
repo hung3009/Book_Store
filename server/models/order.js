@@ -8,6 +8,10 @@ const orderSchema = new mongoose.Schema({
     maxlength: 100,
     unique: true,
   },
+  email : {
+    type: String,
+    required: true,
+  },
   order_volume: {
     type: [
       {

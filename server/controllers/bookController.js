@@ -250,5 +250,30 @@ const bookController = {
       });
     }
   },
+  
+  getBooksByPriceRange: async (req, res) => {
+    try {
+      let filter = {};
+      const priceFilter = req.params.priceFilter;
+      switch (priceFilter) {
+        case "under10":
+          filter = { Price: { $lt: 10 } };
+          break;
+        case "10to20":
+          filter = { Price: { $gte: 10, $lte: 20 } };
+          break;
+        case "over20":
+          filter = { Price: { $gt: 20 } };
+          break;
+      }
+  
+      const books = await Book.find(filter);
+      res.status(200).json(books);
+    } catch (err) {
+      res.status(500).json({
+        message: err.message,
+      });
+    }
+  },
 };
 module.exports = bookController;

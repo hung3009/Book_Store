@@ -9,7 +9,6 @@ const orderController = {
       res.json({ message: "fail", error: error.message });
     }
   },
-
   createOrder: async (req, res) => {
     try {
       console.log("req.body", req.body);
@@ -85,6 +84,23 @@ const orderController = {
         "Une erreur s'est produite lors de la suppression de la commande : " +
           erreur.message
       );
+    }
+  },
+  findOrderByEmail: async (req, res) => {
+    try {
+      const { email } = req.body;
+      console.log("email", email);
+
+      // Tìm tất cả các đơn hàng có email trùng khớp
+      const orders = await Order.find({ email });
+
+      if (orders.length > 0) {
+        res.json(orders);
+      } else {
+        res.json("No orders found for this email");
+      }
+    } catch (error) {
+      res.json("Fail to find orders by email: " + error.message);
     }
   },
 };

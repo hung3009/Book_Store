@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import Search from "../layout/header/search";
 import { Space, Menu, Avatar } from "antd";
 import Avatars from "../layout/header/custom/avatar";
-import { MenuDrawer, MenuItems } from "./drawer";
+import { MenuDrawer, MenuItems } from "../layout/header/drawer";
 const ClientPage = ({ children }) => {
   const [scroll, setScroll] = useState("up_online");
 
@@ -43,6 +43,7 @@ const ClientPage = ({ children }) => {
         <Space id="drawer">
           <MenuDrawer />
         </Space>
+
       </div>
 
       <div className="main_client">

@@ -11,7 +11,7 @@ import {
 import DefaultLayout from "./components/main";
 
 import { publicRoutes, userRoutes, employeeRoutes } from "./Routes";
-import ClientLayout from "./components/ClientPage";
+import ClientLayout from "./components/ClientLayout";
 import adminRoutes from "./Routes/adminRoutes";
 import { useSelector } from "react-redux";
 import LoadingError from "./components/layout/error/loading";

@@ -13,7 +13,7 @@ import Paypal from "../components/paypal";
 import Detailbook from "../components/Product/detail";
 import Chat from "../utils/chat";
 import BookPay from "../pages/BookPay";
-import ClientPage from "../components/ClientPage";
+import ClientPage from "../components/ClientLayout";
 import DefaultLayout from "../components/main";
 // public routes
 const publicRoutes = [

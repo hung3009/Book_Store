@@ -13,7 +13,9 @@ function Home() {
   const [totalPages, setTotalPages] = useState(1);
   const [pageNumbers, setPageNumbers] = useState([]);
   const [genre, setGenre] = useState([]);
-  const [selectedGenre, setSelectedGenre] = useState(null);
+  const [selectedGenre, setSelectedGenre] = useState("All gerne");
+  const [priceFilter, setPriceFilter] = useState("all");
+
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_PORT}/getgenre`)
@@ -28,6 +30,9 @@ function Home() {
   const handleGenreChange = (value) => {
     console.log(`selected ${value}`);
     setSelectedGenre(value);
+
+
+
     console.log(`selected ${value}`);
     axios
 
@@ -48,6 +53,7 @@ function Home() {
   }, [currentPage, pageSize]);
 
   const fetchProducts = () => {
+    
     const url = `${process.env.REACT_APP_API_PORT}/getallbooks?page=${currentPage}&pageSize=${pageSize}`;
     axios
       .get(url)
@@ -69,6 +75,20 @@ function Home() {
     }
   };
 
+  const handlePriceFilterChange = (value) => {
+    setPriceFilter(value);
+  
+    // Gọi API để lấy sản phẩm với bộ lọc giá
+    axios
+      .get(`${process.env.REACT_APP_API_PORT}/books/price/${value}`)
+      .then((res) => {
+        setProducts(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <div className="home">
@@ -84,27 +104,40 @@ function Home() {
           </div>
         </Carousel>
         <div className="horizontal-line"></div>
-        <Select
-          mode="single"
-          placeholder="Select a genre"
-          style={{
-            width: "300px",
-            margin: "0 auto",
-            display: "block",
-            borderRadius: "4px",
-            border: "2px solid #1890ff",
-          }}
-          options={[
-            //{ value: "all", label: "All" }, // Thêm một tùy chọn "All"
-            ...[...new Set(genre)].map((item) => ({
-              value: item,
-              label: item,
-            })),
-          ]}
-          value={selectedGenre}
-          onChange={handleGenreChange}
-          allowClear={true} // Cho phép bỏ chọn thể loại
-        />
+
+        <div className="filter-container">
+          <Select
+            mode="single"
+            placeholder="Select a genre"
+            className="filter"
+            options={[
+              { value: "all", label: "All" },
+              ...[...new Set(genre)].map((item) => ({
+                value: item,
+                label: item,
+              })),
+            ]}
+            value={selectedGenre}
+            onChange={handleGenreChange}
+            allowClear={true}
+          />
+
+          <Select
+            mode="single"
+            placeholder="Select a price range"
+            className="filter" // Thêm lớp .filter để căn giữa ngang
+            options={[
+              { value: "all", label: "All Prices" },
+              { value: "under10", label: "Under $10" },
+              { value: "10to20", label: "$10 - $20" },
+              { value: "over20", label: "Over $20" },
+            ]}
+            value={priceFilter}
+            onChange={handlePriceFilterChange}
+            allowClear={true}
+          />
+        </div>
+
         <div className="home-container_5 con">
           {products.map(
             ({

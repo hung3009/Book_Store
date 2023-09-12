@@ -43,6 +43,7 @@ router.get("/:id", bookController.getBookById); //
 router.get("/search/:query", bookController.searchBook); //
 router.post("/getbookbygenre", bookController.searchBookByGenre); //
 router.put("/importbook", bookController.importBook); //
+router.get("/books/price/:priceFilter", bookController.getBooksByPriceRange);
 
 //order
 router.post("/getallorder", orderController.getAllOrder); //
@@ -54,6 +55,7 @@ router.post(
 router.put("/setstateorder", orderController.setStateOrder); //
 router.post("/findorder", orderController.findOrder); //
 router.delete("/removeorder", orderController.removeOrder); //
+router.post("/findOrderbyEmail", orderController.findOrderByEmail); //
 
 //revenue
 router.post("/findrevenue", revenueController.findRevenue); //

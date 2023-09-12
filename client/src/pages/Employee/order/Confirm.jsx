@@ -19,7 +19,7 @@ const CardConfirmOrder = (props) => {
         setOrder_volume(res.data);
         if (res.data.length > 0) {
           const firstOrder = res.data[0];
-          if (firstOrder.order_volume) {
+          if (Array.isArray(res.data) && firstOrder.order_volume) {
             const mappedData = firstOrder.order_volume.map((item) => ({
               id_book: item.id_book,
               quantity: item.quantity,
@@ -45,9 +45,13 @@ const CardConfirmOrder = (props) => {
         setLoading(false);
       });
     message.success("Confirm Order Success");
+
     dispatch(resetPayment());
     dispatch(resetOrder());
-    window.location.reload();
+
+    setTimeout(() => {
+      window.location.reload(); 
+    }, 2000);
   };
 
   return (
@@ -93,11 +97,12 @@ const CardConfirmOrder = (props) => {
                 flexDirection: "column",
               }}
             >
-              <p>Total: {order.price_total.toFixed(2)}</p>
+              <p><b>Email:</b> {order.email}</p>
+              <p><b>Total:</b> {order.price_total.toFixed(2)}</p>
             </Card>
           
           ))}
-          {getAllOrder.map((order, index) => (
+          {Array.isArray(getAllOrder) && getAllOrder.map((order, index) => (
             <Card
               key={index}
               style={{
@@ -109,8 +114,8 @@ const CardConfirmOrder = (props) => {
                 flexDirection: "column",
               }}
             >
-              <p>ID Book: {order.id_book}</p>
-              <p>Quantity: {order.quantity}</p>
+              <p><b>ID Book:</b> {order.id_book}</p>
+              <p><b>Quantity:</b> {order.quantity}</p>
             </Card>
           ))}
         </Space>

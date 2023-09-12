@@ -4,7 +4,7 @@ import { Drawer, Menu, Space } from "antd";
 import { UnorderedListOutlined } from "@ant-design/icons";
 
 import { useNavigate } from "react-router-dom";
-import "./styles.scss";
+import "../../ClientLayout/styles.scss";
 function MenuDrawer() {
   const [drawerVisible, setDrawerVisible] = useState(false);
   const showDrawer = () => {

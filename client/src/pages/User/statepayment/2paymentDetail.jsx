@@ -64,6 +64,8 @@ const PaymentDetails = () => {
     state: 2,
   };
 
+  console.log(data);
+
   async function handlePayment() {
     console.log("paymentasdfafsd", payment.orderDetails);
 

@@ -1,4 +1,4 @@
-import Order from "./oder";
+import Order from "./order";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -7,11 +7,13 @@ function MyOrder() {
   const [findOrder, setFindOrder] = useState([]);
 
   const user = useSelector((state) => state.user);
+  //console.log(user);
 
   useEffect(() => {
     axios
-      .post(`${process.env.REACT_APP_API_PORT}/findorder`, {
-        order_code: user.list_id_order,
+      .post(`${process.env.REACT_APP_API_PORT}/findOrderbyEmail`, {
+        // order_code: user.list_id_order,
+        email: user.email,
       })
       .then((res) => {
         console.log("res", res.data);
@@ -22,7 +24,7 @@ function MyOrder() {
         }
       })
       .catch((err) => console.log(err));
-  }, [user.order_code]);
+  }, [user.email]);
 
   console.log("find", findOrder);
 

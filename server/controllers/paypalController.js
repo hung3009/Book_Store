@@ -16,8 +16,7 @@ const paypalController = {
   
   capturePayment: async (req, res) => {
     const orderID = req.body.orderID;
-    const { id_order, email, price_total, state, order_volume } =
-      req.body.props;
+    const { id_order, email, price_total, state, order_volume } = req.body.props;
 
     try {
       const order = new Order({
@@ -27,11 +26,13 @@ const paypalController = {
         state: state,
         order_volume: order_volume,
       });
+      await order.save();
+
       const user = await User.findOne({ email: email });
       user.list_id_oder.push(id_order);
       await user.save();
 
-      await order.save();
+      // await order.save();
       const getRequest = new paypal.orders.OrdersGetRequest(orderID);
       const getResponse = await client.execute(getRequest);
 
