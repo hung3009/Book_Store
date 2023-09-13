@@ -1,21 +1,25 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"; 
+import { useParams, useNavigate } from "react-router-dom"; 
 import { Typography } from "antd";
 import Rating from "@mui/material/Rating";
 import { useSelector, useDispatch } from "react-redux";
 import "./detail.scss";
 import { message } from "antd";
-import { ShoppingCartOutlined } from "@ant-design/icons";
+import { ShoppingCartOutlined, LeftOutlined } from "@ant-design/icons";
 import { addToCart } from "..//..//redux//features//orderSlice";
 import ListCardProduct from "./listcard";
 import CommentComponent from "./CommentComponent";
-// import LikeButton from "./SocialPlugin/LikeButton";
-// import Comment from "./SocialPlugin/Comment";
 import { initFacebookSDK } from "../../utils/facebookplugin/initSDKFacebook"
 const { Text, Title, H } = Typography;
 
 function Detailbook(props) {
+  const navigate = useNavigate();
+
+  const handleArrowClick = () => {
+    navigate("/");
+  };
+
   const [idp, setIdp] = useState(useParams().id);
   // console.log("sf", props);
   const [data, setData] = useState([]);
@@ -65,6 +69,12 @@ function Detailbook(props) {
   };
   return (
     <>
+      <div className="back-to-home" onClick={handleArrowClick}>
+        <div className="left-arrow">
+          &rarr;
+        </div>
+        <div className="back-text">Back to Homepage</div>
+      </div>
       <div class="grid-container">
         <form id="f1">
           <div>

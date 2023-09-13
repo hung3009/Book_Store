@@ -12,7 +12,7 @@ import Search from "../layout/header/search";
 import { Space } from "antd";
 import SensorOccupiedIcon from "@mui/icons-material/SensorOccupied";
 
-const OnlineLayout = () => {
+const OnlineLayout = ({children}) => {
   const [scroll, setScroll] = useState("up_online");
 
   window.addEventListener("scroll", function () {
@@ -59,9 +59,7 @@ const OnlineLayout = () => {
       </div>
       {/* main */}
       <div className="main_online">
-        <div className="containers_online">
-          <Home />{" "}
-        </div>
+        <div className="containers_online">{children}</div>
         <Footer />
       </div>
     </>

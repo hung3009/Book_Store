@@ -9,7 +9,6 @@ import DefaultLayout from "../components/main";
 const adminRoutes = [
   {
     path: "/",
-
     component: Home,
     DefaultLayout: DefaultLayout,
   },

@@ -19,9 +19,9 @@ import DefaultLayout from "../components/main";
 const publicRoutes = [
   {
     path: "/",
-    component: OnlineLayout,
-    DefaultLayout: DefaultLayout,
-    layout: null,
+    component: Home,
+    DefaultLayout: OnlineLayout,
+    // layout: null,
   },
   {
     path: "/signin",
@@ -55,7 +55,8 @@ const publicRoutes = [
   {
     path: `/detail-book/:id`,
     component: Detailbook,
-    DefaultLayout: DefaultLayout,
+    DefaultLayout: OnlineLayout,
+    // layout: null,
   },
   {
     path: `/signup-account-payment`,
